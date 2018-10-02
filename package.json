@@ -1,0 +1,33 @@
+{
+  "name": "unete",
+  "version": "1.0.0",
+  "description": "Import and use node.js microservices with sugar syntax.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "commander": "^2.18.0",
+    "get-port": "^4.0.0",
+    "micro": "^9.3.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "micro-dev": "^3.0.0"
+  },
+  "bin": {
+    "unete": "./unete.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CamiloTD/unete.git"
+  },
+  "keywords": [],
+  "author": "CamiloTD",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CamiloTD/unete/issues"
+  },
+  "homepage": "https://github.com/CamiloTD/unete#readme"
+}
