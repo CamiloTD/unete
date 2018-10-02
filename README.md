@@ -32,7 +32,7 @@ Now, let's create our main endpoint:
 
 **consumer.js**
 ```js
-let { Connector } = require('../index');
+let { Connector } = require('unete');
 
 (async () => {
 	let math = await Connector('http://localhost:5000');
