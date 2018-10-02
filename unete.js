@@ -11,7 +11,7 @@ let  port   = cli.port;
 
 if(!port) throw "PORT_EXPECTED";
 
-let _module = require(path.join(process.cwd(), cli._module || 'index.js'));
+let _module = require(path.join(process.cwd(), cli.module || 'index.js'));
 
 let router = new Router(_module, { port });
 
