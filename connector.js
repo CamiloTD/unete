@@ -7,6 +7,7 @@ class Connector {
         this.host = url;
         this.map = {};
         this.key = config.key;
+        this.service = config.service || "main";
     }
 
     decode (e) { 
@@ -26,8 +27,12 @@ class Connector {
         let response = await request({
             method: 'POST',
             uri: `${this.host}${method}`,
-            body: this.encode(JSON.stringify(data))
+            body: this.encode(JSON.stringify({
+                service: this.service,
+                arguments: data
+            }))
         });
+
         try {
             response = JSON.parse(this.decode(response))
         } catch (exc) {

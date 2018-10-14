@@ -11,13 +11,9 @@ class Router extends EventEmitter {
     constructor (_module, config = {}) {
         super();
 
-        this.service = new Service(_module);
+        this.services = { 'main': new Service(_module) };
         this.port = config.port;
         this.key = config.key;
-    }
-
-    route (url, args) {
-        return this.service.execute(url, args);
     }
 
     decode (e) { 
@@ -50,15 +46,14 @@ class Router extends EventEmitter {
                     }));
                 } else throw "METHOD_UNSUPPORTED";
 
-                json = {
-                    status: "ok",
-                    result: await this.route(_url.pathname, args)
-                };
+                if(!args.service)
+                    throw "INVALID_SERVICE";
+
+                let result = await this.services[args.service].execute(_url.pathname, args.arguments);
+
+                json = { status: "ok", result: result };
             } catch (exc) {
-                json = {
-                    status: "err",
-                    result: exc
-                };
+                json = { status: "err", result: exc };
             }
 
             rs.end(this.encode(JSON.stringify(json)));
