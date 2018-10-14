@@ -4,6 +4,7 @@ let getPort = require('get-port');
 let http = require('http');
 let url = require('url');
 let qs  = require('querystring');
+let AES = require('aes256');
 
 class Router extends EventEmitter {
 
@@ -12,10 +13,19 @@ class Router extends EventEmitter {
 
         this.service = new Service(_module);
         this.port = config.port;
+        this.key = config.key;
     }
 
     route (url, args) {
         return this.service.execute(url, args);
+    }
+
+    decode (e) { 
+        return this.key? AES.decrypt(this.key, e) : e;
+    }
+
+    encode (e) {
+        return this.key? AES.encrypt(this.key, e) : e;
     }
 
     async serve () {
@@ -32,9 +42,9 @@ class Router extends EventEmitter {
                         rq.on('data', (data) => str += data.toString());
                         rq.on('end', () => {
                             try {
-                                resolve(JSON.parse(str));
+                                resolve(JSON.parse(this.decode(str)));
                             } catch (exc) {
-                                reject(exc);
+                                reject("UNAUTHORIZED");
                             }
                         });
                     }));
@@ -51,7 +61,7 @@ class Router extends EventEmitter {
                 };
             }
 
-            rs.end(JSON.stringify(json));
+            rs.end(this.encode(JSON.stringify(json)));
         });
         
         server.listen(port, () => {

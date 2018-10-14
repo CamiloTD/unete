@@ -1,10 +1,20 @@
 const request = require('request-promise');
+let AES = require('aes256');
 
 class Connector {
 
-    constructor (url) {
+    constructor (url, config = {}) {
         this.host = url;
         this.map = {};
+        this.key = config.key;
+    }
+
+    decode (e) { 
+        return this.key? AES.decrypt(this.key, e) : e;
+    }
+
+    encode (e) {
+        return this.key? AES.encrypt(this.key, e) : e;
     }
 
     async init () {
@@ -16,9 +26,13 @@ class Connector {
         let response = await request({
             method: 'POST',
             uri: `${this.host}${method}`,
-            body: data,
-            json: true
+            body: this.encode(JSON.stringify(data))
         });
+        try {
+            response = JSON.parse(this.decode(response))
+        } catch (exc) {
+            throw "UNAUTHORIZED";
+        }
 
         if(response.status === "err") throw response.result;
 
@@ -52,8 +66,8 @@ class Connector {
 
 }
 
-module.exports = async (url) => {
-    let connector = new Connector(url);
+module.exports = async (url, config) => {
+    let connector = new Connector(url, config);
 
     await connector.init();
 

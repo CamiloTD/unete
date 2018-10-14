@@ -7,6 +7,7 @@
     "example": "examples"
   },
   "dependencies": {
+    "aes256": "^1.0.4",
     "commander": "^2.18.0",
     "get-port": "^4.0.0",
     "micro": "^9.3.3",
