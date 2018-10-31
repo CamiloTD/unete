@@ -51,6 +51,11 @@ class Router extends EventEmitter {
                 };
             }
 
+            rs.setHeader('Access-Control-Allow-Origin', '*');
+            rs.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+            rs.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+            rs.setHeader('Access-Control-Allow-Credentials', true);
+
             rs.end(JSON.stringify(json));
         });
         
